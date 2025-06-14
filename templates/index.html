@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Almamater</title>
+    <link rel="stylesheet" href="static/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist&display=swap" rel="stylesheet">
+    <script src="static/js/main.js"></script>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="main-header">
+        <nav class="navbar">
+            <div class="logo" onclick="window.location.href = `/`">
+                <span class="logo-text">alma mater</span>
+                <span class="logo-subtitle">made for NIT Trichy</span>
+            </div>
+            <div class="nav-buttons">
+                <a href="#rideshare" class="nav-btn rideshare-btn">Ride sharing</a>
+                <a href="/marketplace" class="nav-btn marketplace-btn">Market Place</a>
+                <a href="/login" class="nav-btn login-btn" id = login-btn>Login</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title">All of your College needs, right here.</h1>
+            <div class="hero-card">
+                <div class="hero-illustration">
+                    <img src="static/images/hero-illustration.png" alt="Students waving goodbye" class="hero-image">
+                </div>
+                <div class="hero-content">
+                    <h2>See you back next semester!</h2>
+                    <p>Have a great vacation!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services">
+        <div class="container">
+            <div class="services-grid">
+                <!-- Market Place Card -->
+                <div class="service-card marketplace-card">
+                    <h3>Market Place</h3>
+                    <p>Buy and sell second hand belongings</p>
+                    <div class="service-icons">
+                        <img src="static/images/marketplace-icons/phone.png" alt="Phone" class="service-icon-img">
+                        <img src="static/images/marketplace-icons/bicycle.png" alt="Bicycle" class="service-icon-img">
+                        <img src="static/images/marketplace-icons/book.png" alt="Book" class="service-icon-img">
+                    </div>
+                    <a href="/marketplace" class="cta-btn marketplace-cta">Explore</a>
+                </div>
+                
+                <!-- Resources Card -->
+                <div class="service-card resources-card">
+                    <h3>Resources</h3>
+                    <p>Includes Resume templates and How to guides</p>
+                    <div class="service-icon-single">
+                        <img src="static/images/resources-icon.png" alt="School Building" class="service-icon-img large">
+                    </div>
+                    <a href="#resources" class="cta-btn resources-cta">View Resources</a>
+                </div>
+                
+                <!-- Ride Sharing Card -->
+                <div class="service-card rideshare-card">
+                    <h3>Ride Sharing</h3>
+                    <p>Auto & Car pooling</p>
+                    <div class="service-icons">
+                        <img src="static/images/rideshare-icons/auto-rickshaw.png" alt="Auto Rickshaw" class="service-icon-img">
+                        <img src="static/images/rideshare-icons/car.png" alt="Car" class="service-icon-img">
+                    </div>
+                    <a href="#rideshare" class="cta-btn rideshare-cta">Find Co-travellers</a>
+                </div>
+
+                <div class="service-card food-swoosh-card">
+                    <h3>Food Swoosh</h3>
+                    <p>Gatestep food delivery</p>
+                    <div class="service-icons">
+                        <img src="static/images/food-swoosh-icons/ramen.png" alt="Ramen" class="service-icon-img">
+                        <img src="static/images/food-swoosh-icons/biriyani.png" alt="Biriyani" class="service-icon-img">
+                    </div>
+                    <a href="/food-swoosh" class="cta-btn food-swoosh-cta">Order Now</a>
+                </div> 
+
+                <div class="service-card star-xerox-card">
+                    <h3>Star Xerox</h3>
+                    <p>Get your copies printed</p>
+                    <div class="service-icons">
+                        <img src="static/images/star-xerox-icons/star-xerox.png" alt="Star Xerox" class="service-icon-img">
+                    </div>
+                    <a href="/star-xerox" class="cta-btn star-xerox-cta">Send Print Copy</a>
+                </div>  
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="static/images/crown-logo.png" alt="Crown" class="crown-icon">
+                <span>Made for NIT Trichy</span>
+            </div>
+            <nav class="footer-nav">
+                <a href="#terms">Terms and Conditions</a>
+                <a href="#privacy">Privacy Policy</a>
+                <a href="#refunds">Refunds</a>
+                <a href="#contact">Contact Us</a>
+                <a href="#shipping">Shipping and Delivery</a>
+            </nav>
+        </div>
+    </footer>
+    <script type="text/javascript">
+        var name = "{{ name }}"
+        var number = " {{ number }}"
+        if (name != ""){
+            document.getElementById('login-btn').textContent = name
+            document.getElementById('login-btn').href = '/account' 
+            sessionStorage.setItem("name",name)
+            sessionStorage.setItem("number",number)
+        }
+        else if (sessionStorage.getItem("name") != "" && sessionStorage.getItem("name") != null){
+            console.log(sessionStorage.getItem("name"))
+            document.getElementById('login-btn').textContent = sessionStorage.getItem("name")
+            document.getElementById('login-btn').href = '/account' 
+        }
+    </script>
+</body>
+</html>
+

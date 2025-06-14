@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Almamater</title>
+    <link rel="stylesheet" href="static/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist&display=swap" rel="stylesheet">
+    <script src="static/js/marketplace.js"></script>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="main-header">
+        <nav class="navbar">
+            <div class="logo">
+                <span class="logo-text">alma mater</span>
+                <span class="logo-subtitle">made for NIT Trichy</span>
+            </div>
+            <div class="nav-buttons">
+                <a href="#rideshare" class="nav-btn rideshare-btn">Ride sharing</a>
+                <a href="#marketplace" class="nav-btn marketplace-btn">Market Place</a>
+                <a href="/login" class="nav-btn login-btn" id = login-btn>Login</a>
+            </div>
+        </nav>
+    </header>
+     <!-- Hero Section -->
+    <section class="marketplace-hero">
+        <div class="container">
+            <h1 class="hero-title">Market Place</h1>
+            <p class="hero-subtitle">Buy and sell second hand belongings with your college community</p>
+            
+            <!-- Search Bar -->
+            <div class="search-section">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search for products..." class="search-input">
+                    <button class="search-btn" onclick="searchProducts()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </button>
+                </div>
+                <button class="add-product-btn" onclick="showAddProductModal()">+ Add Product</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="content-layout">
+                <!-- Sidebar Filters -->
+                <aside class="filters-sidebar">
+                    <div class="filter-section">
+                        <h3>Categories</h3>
+                        <div class="filter-options">
+                            <label class="filter-option">
+                                <input type="checkbox" name="category" value="all" checked>
+                                <span>All Categories</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="category" value="1">
+                                <span>Electronics</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="category" value="2">
+                                <span>Books</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="category" value="3">
+                                <span>Bicycles</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="category" value="4">
+                                <span>Furniture</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="category" value="5">
+                                <span>Clothing</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="category" value="6">
+                                <span>Sports & Fitness</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="category" value="7">
+                                <span>Miscellaneous</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="filter-section">
+                        <h3>Price Range</h3>
+                        <div class="price-range">
+                            <input type="number" id="minPrice" placeholder="Min ₹" class="price-input">
+                            <span>to</span>
+                            <input type="number" id="maxPrice" placeholder="Max ₹" class="price-input">
+                        </div>
+                    </div>
+
+                    <button class="apply-filters-btn" onclick="applyFilters()">Apply Filters</button>
+                    <button class="clear-filters-btn" onclick="clearFilters()">Clear All</button>
+                </aside>
+
+                <!-- Products Grid -->
+                <section class="products-section">
+                    <div class="products-header">
+                        <div class="results-info">
+                            <span id="resultsCount">Loading products...</span>
+                        </div>
+                        <div class="sort-options">
+                            <label for="sortBy">Sort by:</label>
+                            <select id="sortBy" onchange="sortProducts()">
+                                <option value="newest">Newest First</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                                <option value="alphabetical">Alphabetical</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Products Grid Container -->
+                    <div class="products-grid" id="productsGrid">
+                        <!-- Products will be loaded here dynamically -->
+                    </div>
+
+                    <!-- Loading State -->
+                    <div class="loading-state" id="loadingState">
+                        <div class="loading-spinner"></div>
+                        <p>Loading products...</p>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div class="empty-state" id="emptyState" style="display: none;">
+                        <div class="empty-icon">📦</div>
+                        <h3>No products found</h3>
+                        <p>Try adjusting your search or filters</p>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination" id="pagination">
+                        <button class="page-btn prev-btn" onclick="previousPage()" disabled>Previous</button>
+                        <div class="page-numbers" id="pageNumbers"></div>
+                        <button class="page-btn next-btn" onclick="nextPage()">Next</button>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Product Modal -->
+    <div class="modal-overlay" id="addProductModal" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Add New Product</h2>
+                <button class="close-btn" onclick="closeAddProductModal()">&times;</button>
+            </div>
+            <form class="add-product-form" id="addProductForm">
+                <div class="form-group">
+                    <label for="productTitle">Product Name *</label>
+                    <input type="text" id="productTitle" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="productCategory">Category *</label>
+                    <select id="productCategory" required>
+                        <option value="">Select Category</option>
+                        <option value="1">Electronics</option>
+                        <option value="2">Books</option>
+                        <option value="3">Bicycles</option>
+                        <option value="4">Furniture</option>
+                        <option value="5">Clothing</option>
+                        <option value="6">Sports & Fitness</option>
+                        <option value="7">Misc</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="productPrice">Price (₹) *</label>
+                    <input type="number" id="productPrice" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="negotiable">Negotiable *</label>
+                    <select id="negotiable" required>
+                        <option value=0>No</option>
+                        <option value=1>Yes</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="pref">Preference *</label>
+                    <select id="pref" required>
+                        <option value=0>Whatsapp Message</option>
+                        <option value=1>Phone Call</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="productDescription">Description</label>
+                    <textarea id="productDescription" rows="4"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sellerContact" >Contact Information *</label>
+                    <input type="text" id="sellerContact" placeholder="Phone number or email" required>
+                    <script>
+                        document.getElementById("sellerContact").value = (sessionStorage.getItem("number")).slice(4)
+                    </script>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn" onclick="closeAddProductModal()">Cancel</button>
+                    <button type="submit" class="submit-btn">Add Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="crown-icon">👑</div>
+                <span>Made for NIT Trichy</span>
+            </div>
+            <nav class="footer-nav">
+                <a href="/terms">Terms and Conditions</a>
+                <a href="/privacy">Privacy Policy</a>
+                <a href="/refunds">Refunds</a>
+                <a href="/contact">Contact Us</a>
+                <a href="/shipping">Shipping and Delivery</a>
+            </nav>
+        </div>
+    </footer>
+
+    <script>
+        window.onload = function() {
+            if (sessionStorage.getItem("name") == "" || sessionStorage.getItem("name") == null){
+                window.location.href="/login"
+                alert("Pls login to use alma mater services")
+            }
+            else {
+                document.getElementById('login-btn').textContent =  sessionStorage.getItem("name")
+                document.getElementById('login-btn').href = '/account' 
+            }
+        }
+    </script>
