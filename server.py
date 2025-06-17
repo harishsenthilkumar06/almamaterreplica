@@ -72,12 +72,15 @@ def callback():
 with open(r".\static\market_listings.json","r") as file:
     file_data = json.load(file)
                   
-
 market_listings = file_data
 
 @app.route('/marketplace')
 def marketplace(): 
     return render_template('marketplace.html')
+
+@app.route('/rideshare')
+def rideshare(): 
+    return render_template('rideshare.html')
 
 @app.route("/api/products", methods=["GET"])
 def get_products():
@@ -86,20 +89,19 @@ def get_products():
 @app.route("/api/products", methods=["POST"])
 def add_product():
     data = request.get_json()
-    assert(len(data) == 10) 
 
     new_id = f"prod_{len(market_listings)+1:03d}"
     market_listings[new_id] = data
     
     with open(r".\static\market_listings.json", "w") as file:
-        file.dump(market_listings)
+        json_string = json.dumps(market_listings)
+        file.write(json_string)
 
     return jsonify({"message": "Product added", "product": data}), 201
 
 @app.route("/account")
 def account():
     return render_template("account.html")
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)

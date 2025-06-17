@@ -63,6 +63,7 @@ function hideLoading() {
 
 // Render products
 function renderProducts() {
+    console.log(filteredProducts);
     const grid = document.getElementById('productsGrid');
     const startIndex = (currentPage - 1) * productsPerPage;
     const endIndex = startIndex + productsPerPage;
@@ -121,7 +122,7 @@ function applyFilters() {
     const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked'))
         .map(input => parseInt(input.value));
     
-    if (!selectedCategories.includes('all') && (selectedCategories.length > 0)) {
+    if (!selectedCategories.includes(0)) {
         filtered = filtered.filter(product => selectedCategories.includes(product.cat));
     }
 
@@ -137,9 +138,9 @@ function applyFilters() {
     const query = document.getElementById('searchInput').value.toLowerCase().trim();
     if (query) {
         filtered = filtered.filter(product => 
-            product.title.toLowerCase().includes(query) ||
-            product.description.toLowerCase().includes(query) ||
-            product.category.toLowerCase().includes(query)
+            product.prod_name.toLowerCase().includes(query) ||
+            product.desc.toLowerCase().includes(query) ||
+            product.cat.toLowerCase().includes(query)
         );
     }
     
@@ -276,7 +277,7 @@ async function handleAddProduct(e) {
     const formData = new FormData(e.target);
     const newProduct = {
         prod_name: document.getElementById('productTitle').value,
-        cat: document.getElementById('productCategory').value,
+        cat: parseInt(document.getElementById('productCategory').value),
         price: parseInt(document.getElementById('productPrice').value),
         desc: document.getElementById('productDescription').value,
         seller: sessionStorage.getItem("name"), 
