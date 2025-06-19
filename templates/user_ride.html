@@ -27,31 +27,33 @@
         </nav>
     </header>
     <section class="hero">
-        <form class="search-boxes" id="addRide">
-            <input class="ride-inputs" id="ride-source" type="text" placeholder="Enter Source">
-            <input class="ride-inputs" id="ride-destination" type="text" placeholder="Enter Destination">
-            <span>            
-                <input class = "ride-inputs" id = "ride-date" type="date">
-                <input class = "ride-inputs" id = "ride-time" type="time">
-            </span>
-            <button class="post-ride-btn" onclick = "addRide()">Post Ride</button>
-        </form>
-        <div id="map"></div>
+        <div id="mini-map"></div>
+        <div class="details-container">
+            <p1 id="username-display">Username: </p1>
+            <br>
+            <p1 id="phone-display">Phone: </p1>
+            <div>
+                <button id="change-ride-btn" onclick="change_ride()">Change Ride</button>
+            </div>
+        </div>
     </section>
-    <script src="static/js/rideshare.js"></script>    
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="static/images/crown-logo.png" alt="Crown" class="crown-icon">
+                <span>Made for NIT Trichy</span>
+            </div>
+            <nav class="footer-nav">
+                <a href="#terms">Terms and Conditions</a>
+                <a href="#privacy">Privacy Policy</a>
+                <a href="#refunds">Refunds</a>
+                <a href="#contact">Contact Us</a>
+                <a href="#shipping">Shipping and Delivery</a>
+            </nav>
+        </div>
+    </footer>
+    <script src="static/js/user_ride.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBb8rkkDeTzK-X_zyqfxAorLFxueQAeMgE&libraries=places,gmp-components&v=beta&callback=initMap"></script>
-    <script async defer src="https://www.gstatic.com/maps-platform/places/web/js/PlaceAutocompleteElement.js"></script>
-    <script>
-        window.onload = function() {
-            if (sessionStorage.getItem("name") == "" || sessionStorage.getItem("name") == null){
-                window.location.href="/login"
-                alert("Pls login to use alma mater services")
-            }
-            else {
-                document.getElementById('login-btn').textContent =  sessionStorage.getItem("name")
-                document.getElementById('login-btn').href = '/account' 
-            }
-        }
-    </script>
 </body>
 </html>
