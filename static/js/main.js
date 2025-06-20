@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add scroll effect to header
     const header = document.querySelector('.main-header');
     let lastScrollTop = 0;
-    
+
     window.addEventListener('scroll', function() {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         

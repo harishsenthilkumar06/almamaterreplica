@@ -12,6 +12,10 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route('/')
 def index():
+
+    if (request.args.get('code') == None):
+        print("called")
+
     global user_details
     print(user_details)
     if len(user_details) != 0:
@@ -22,11 +26,15 @@ def index():
                     name_abbr = name_abbr + " " + i[0]
                     number=user_details['phoneNumber']
                     user_details = {}
+        else:
+            name_abbr = user_details['name']
+            number = user_details['phoneNumber']
+            user_details = {}
         return render_template('index.html', name=name_abbr, number=number)
     else:
         return render_template('index.html')
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])   
 @cross_origin()
 def login():
     return render_template('login.html')
@@ -38,6 +46,7 @@ def callback():
     print("Received code:", code)
 
     if not code:
+        print("Code not")
         return "No code provided", 400
 
     token_url = 'https://auth.delta.nitt.edu/api/oauth/token'
@@ -52,6 +61,8 @@ def callback():
     try:
         token_response = requests.post(token_url, data=data)
         print(token_response.json().get('access_token'))
+        if token_response.json().get('access_token') == None:
+            return redirect('/')
     except:
         return "Error connecting to the token endpoint", 500
     
@@ -61,18 +72,34 @@ def callback():
             'authorization': f"Bearer {token_response.json().get('access_token')}"
         }
         try:
+            print("belh")
             resources_response = requests.post(resources_url, headers=headers)
         except:
             return "Error connecting to the resources endpoint", 500
-                
+    else: 
+        print("bleh")
     print(type(resources_response))
     user_details.update(resources_response.json())
     return redirect('/')
 
-with open(r".\static\market_listings.json","r") as file:
-    file_data = json.load(file)
-                  
-market_listings = file_data
+all_rides = {}
+market_listings = {}
+
+try:
+    with open(r".\static\market_listings.json","r") as file:
+        market_file_data = json.load(file)
+    market_listings = market_file_data
+
+except:
+    print("No market listings.")
+
+try:
+    with open(r".\static\all_rides.json","r") as file:
+        rides_file_data = json.load(file)
+    all_rides = rides_file_data
+
+except:
+    print("No rides.")
 
 @app.route('/marketplace')
 def marketplace(): 
@@ -82,9 +109,16 @@ def marketplace():
 def rideshare(): 
     return render_template('rideshare.html')
 
+@app.route('/user_ride')
+def user_ride(): 
+    return render_template('user_ride.html')
+
 @app.route("/api/products", methods=["GET"])
 def get_products():
-    return jsonify(list(market_listings.values()))
+    try:
+        return jsonify(list(market_listings.values()))
+    except:
+        return jsonify([])
 
 @app.route("/api/products", methods=["POST"])
 def add_product():
@@ -98,6 +132,26 @@ def add_product():
         file.write(json_string)
 
     return jsonify({"message": "Product added", "product": data}), 201
+
+@app.route("/api/rides", methods=["POST"])
+def add_ride():
+
+    data = request.get_json()
+
+    all_rides[data['number']] = data
+
+    with open(r".\static\all_rides.json", "w") as file:
+        json_string = json.dumps(all_rides)
+        file.write(json_string)
+
+    return jsonify({"message": "Ride added", "ride": data}), 201
+
+@app.route("/api/rides", methods=["GET"])
+def get_rides():
+    try:
+        return jsonify(list(all_rides.values()))
+    except:
+        return jsonify([])
 
 @app.route("/account")
 def account():

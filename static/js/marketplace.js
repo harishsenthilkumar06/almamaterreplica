@@ -4,19 +4,15 @@ let productsPerPage = 12;
 let allProducts = [];
 let filteredProducts = [];
 
-// Initialize the page
+
 document.addEventListener('DOMContentLoaded', function() {
-    // In a real application, this would fetch from Flask backend
     loadProducts();
     setupEventListeners();
 });
 
-// Setup event listeners
 function setupEventListeners() {
-    // Search functionality
     document.getElementById('searchInput').addEventListener('input', debounce(searchProducts, 300));
     
-    // Filter change listeners
     document.querySelectorAll('input[name="category"]').forEach(input => {
         input.addEventListener('change', applyFilters);
     });
@@ -24,10 +20,8 @@ function setupEventListeners() {
     document.getElementById('minPrice').addEventListener('input', debounce(applyFilters, 300));
     document.getElementById('maxPrice').addEventListener('input', debounce(applyFilters, 300));
     
-    // Add product form
     document.getElementById('addProductForm').addEventListener('submit', handleAddProduct);
     
-    // Modal close on overlay click
     document.getElementById('addProductModal').addEventListener('click', function(e) {
         if (e.target === this) {
             closeAddProductModal();
@@ -35,7 +29,6 @@ function setupEventListeners() {
     });
 }
 
-// Load products (simulates Flask backend call)
 async function loadProducts() {
     showLoading();
     
@@ -48,20 +41,17 @@ async function loadProducts() {
     updateResultsCount();
 }
 
-// Show loading state
 function showLoading() {
     document.getElementById('loadingState').style.display = 'block';
     document.getElementById('productsGrid').style.display = 'none';
     document.getElementById('emptyState').style.display = 'none';
 }
 
-// Hide loading state
 function hideLoading() {
     document.getElementById('loadingState').style.display = 'none';
     document.getElementById('productsGrid').style.display = 'grid';
 }
 
-// Render products
 function renderProducts() {
     console.log(filteredProducts);
     const grid = document.getElementById('productsGrid');
@@ -95,7 +85,6 @@ function renderProducts() {
     renderPagination();
 }
 
-// Search products
 function searchProducts() {
     const query = document.getElementById('searchInput').value.toLowerCase().trim();
     
@@ -114,11 +103,9 @@ function searchProducts() {
     updateResultsCount();
 }
 
-// Apply filters
 function applyFilters() {
     let filtered = [...allProducts];
     
-    // Category filter
     const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked'))
         .map(input => parseInt(input.value));
     
@@ -126,7 +113,6 @@ function applyFilters() {
         filtered = filtered.filter(product => selectedCategories.includes(product.cat));
     }
 
-    // Price range filter
     const minPrice = parseFloat(document.getElementById('minPrice').value) || 0;
     const maxPrice = parseFloat(document.getElementById('maxPrice').value) || Infinity;
     
@@ -134,7 +120,6 @@ function applyFilters() {
         product.price >= minPrice && product.price <= maxPrice
     );
     
-    // Apply search query if exists
     const query = document.getElementById('searchInput').value.toLowerCase().trim();
     if (query) {
         filtered = filtered.filter(product => 
@@ -150,28 +135,21 @@ function applyFilters() {
     updateResultsCount();
 }
 
-// Clear all filters
 function clearFilters() {
-    // Reset category filters
     document.querySelectorAll('input[name="category"]').forEach(input => {
         input.checked = input.value === 'all';
     });
     
-    // Reset condition filter
     document.querySelector('input[name="condition"][value="all"]').checked = true;
     
-    // Reset price inputs
     document.getElementById('minPrice').value = '';
     document.getElementById('maxPrice').value = '';
     
-    // Reset search
     document.getElementById('searchInput').value = '';
     
-    // Apply filters
     applyFilters();
 }
 
-// Sort products
 function sortProducts() {
     const sortBy = document.getElementById('sortBy').value;
     
@@ -194,23 +172,19 @@ function sortProducts() {
     renderProducts();
 }
 
-// Update results count
 function updateResultsCount() {
     const count = filteredProducts.length;
     const resultsText = count === 1 ? '1 product found' : `${count} products found`;
     document.getElementById('resultsCount').textContent = resultsText;
 }
 
-// Pagination
 function renderPagination() {
     const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
     const pageNumbers = document.getElementById('pageNumbers');
     
-    // Update prev/next buttons
     document.querySelector('.prev-btn').disabled = currentPage === 1;
     document.querySelector('.next-btn').disabled = currentPage === totalPages;
     
-    // Render page numbers
     let paginationHTML = '';
     const maxVisiblePages = 5;
     let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
@@ -250,7 +224,6 @@ function goToPage(page) {
     renderProducts();
 }
 
-// Product actions
 function viewProduct(productId) {
     const product = allProducts.find(p => p.id === productId);
     if (product) {
@@ -258,7 +231,6 @@ function viewProduct(productId) {
     }
 }
 
-// Modal functions
 function showAddProductModal() {
     document.getElementById('addProductModal').style.display = 'flex';
     document.body.style.overflow = 'hidden';
@@ -270,7 +242,6 @@ function closeAddProductModal() {
     document.getElementById('addProductForm').reset();
 }
 
-// Handle add product form submission
 async function handleAddProduct(e) {
     e.preventDefault();
     
@@ -293,15 +264,13 @@ async function handleAddProduct(e) {
         body: JSON.stringify(newProduct)
     });
     
-    // For demo, add to local array
     allProducts.unshift(newProduct);
-    applyFilters(); // Refresh the display
+    applyFilters(); 
     
     closeAddProductModal();
     alert('Product added successfully!');
 }
 
-// Get category icon
 function getCategoryIcon(category) {
     const icons = {
         'electronics': '📱',
@@ -314,7 +283,6 @@ function getCategoryIcon(category) {
     return icons[category] || '📦';
 }
 
-// Utility function for debouncing
 function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {

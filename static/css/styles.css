@@ -605,27 +605,16 @@ body {
 }
 
 .apply-filters-btn,
-.clear-filters-btn {
+.clear-filters-btn,
+.post-ride-btn {
     width: 100%;
-    padding: var(--spacing-3) var(--spacing-4);
+    padding: 15px;
     border: none;
     border-radius: 8px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
     margin-bottom: var(--spacing-2);
-}
-
-.apply-filters-btn {
-    padding: var(--spacing-2);
-    background: var(--gradient-purple);
-    color: var(--white);
-}
-
-.clear-filters-btn {
-    padding: var(--spacing-2);
-    background: lightgray;
-    color: var(--text-gray);
 }
 
 .apply-filters-btn:hover,
@@ -966,4 +955,44 @@ body {
     color: white;
     border: none;
     border-radius: 10px;
+}
+
+#map {
+    height: 100vh;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.search-boxes {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 400px;
+    background-color: rgba(255, 255, 255, 0.9); /* Light background for visibility */
+    padding: 10px; /* Add some padding */
+    border-radius: 16px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    pointer-events: auto;
+}
+
+.ride-inputs {
+    padding: 10px;
+    border-radius: 16px;
+    font-family: "Urbanist", Verdana, sans-serif;
+    padding-bottom: 5px;
+}
+
+#mini-map {
+    height: 30vh;
+    width: 30%;
+    position: relative;
+    top: 10%;
+    left: 35%;
 }
